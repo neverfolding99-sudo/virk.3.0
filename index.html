@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virk.dk - Erhvervsstyrelsen | Digital selvbetjening</title>
+    <meta name="description" content="Virk.dk er erhvervslivets indgang til det offentlige. Log ind med MitID.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="topbar-container">
+            <span class="topbar-text">Officiel myndighedsside for virksomheder i Danmark</span>
+            <div class="topbar-links">
+                <a href="#" class="topbar-link">English</a>
+                <span class="topbar-separator">|</span>
+                <a href="#" class="topbar-link">Dansk</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-area">
+                <img src="assets/virk-logo.svg" alt="Virk.dk" class="main-logo">
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link active">Forside</a>
+                <a href="#" class="nav-link">Selvbetjening</a>
+                <a href="#" class="nav-link">Registrering</a>
+                <a href="#" class="nav-link">Indberetning</a>
+                <a href="#" class="nav-link">Guides</a>
+                <a href="#" class="nav-link">Kontakt</a>
+            </nav>
+            <a href="login.html" class="btn-header-login">
+                <svg class="btn-login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Log ind
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    Erhvervsstyrelsen
+                </div>
+                <h1 class="hero-title">Din indgang til<br>det offentlige</h1>
+                <p class="hero-description">
+                    Virk.dk samler digitale selvbetjeningsløsninger fra offentlige myndigheder 
+                    til virksomheder i Danmark.
+                </p>
+                <div class="hero-actions">
+                    <a href="login.html" class="btn-primary-large">
+                        Log ind med MitID
+                        <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="btn-outline-large">Opret bruger</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-badge">
+                        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <polyline points="9 12 11 14 15 10"/>
+                        </svg>
+                        <span>Sikkert login med MitID</span>
+                    </div>
+                    <div class="trust-badge">
+                        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <span>SSL-krypteret forbindelse</span>
+                    </div>
+                    <div class="trust-badge">
+                        <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <span>Beskyttet af dansk lovgivning</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="login-preview-card">
+                    <div class="preview-card-header">
+                        <img src="assets/mitid-logo.svg" alt="MitID" class="mitid-preview-logo">
+                    </div>
+                    <div class="preview-card-body">
+                        <div class="preview-field"></div>
+                        <div class="preview-field"></div>
+                        <div class="preview-button"></div>
+                    </div>
+                    <div class="preview-card-footer">
+                        <span class="preview-lock-text">
+                            <svg class="preview-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Beskyttet forbindelse
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="features-title">Populære selvbetjeningsløsninger</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>CVR - Virksomhedsregistrering</h3>
+                    <p>Registrer ny virksomhed eller opdater eksisterende oplysninger.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3>Årsrapport indberetning</h3>
+                    <p>Indberet virksomhedens årsrapport elektronisk til Erhvervsstyrelsen.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <h3>Regnskab og moms</h3>
+                    <p>Indberet moms og virksomhedens regnskab digitalt.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>Digital Post</h3>
+                    <p>Modtag og besvar post fra offentlige myndigheder.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Klar til at komme i gang?</h2>
+            <p>Log ind med MitID og få adgang til alle selvbetjeningsløsninger.</p>
+            <a href="login.html" class="btn-primary-large">
+                Log ind nu
+                <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="assets/virk-logo-white.svg" alt="Virk.dk" class="footer-logo">
+                <p>Erhvervsstyrelsen</p>
+                <p>Langelinie Allé 17</p>
+                <p>2100 København Ø</p>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <p>Telefon: 35 29 10 00</p>
+                <p>Email: virk@erst.dk</p>
+                <p>CVR: 10 15 08 17</p>
+            </div>
+            <div class="footer-col">
+                <h4>Hurtige links</h4>
+                <a href="login.html">Log ind</a>
+                <a href="#">Selvbetjening</a>
+                <a href="#">Ofte stillede spørgsmål</a>
+            </div>
+            <div class="footer-col">
+                <h4>Juridisk</h4>
+                <a href="#">Privatlivspolitik</a>
+                <a href="#">Cookiepolitik</a>
+                <a href="#">Tilgængelighedserklæring</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Erhvervsstyrelsen. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
